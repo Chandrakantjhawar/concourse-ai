@@ -19,7 +19,7 @@ const app = new Hono();
 // ── Middleware ────────────────────────────────────────────
 
 app.use('/*', cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: '*', // Allow all origins for the hackathon deployment
   allowMethods: ['GET', 'POST', 'OPTIONS'],
   allowHeaders: ['Content-Type'],
 }));
