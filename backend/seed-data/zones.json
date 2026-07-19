@@ -1,0 +1,148 @@
+[
+  {
+    "id": "metlife-zone-a", "stadium_id": "metlife", "name": "North Concourse — Sections 100-110",
+    "capacity": 8500, "current_count": 5200, "trend_last_10min": "rising",
+    "gates": ["Gate A", "Gate B"], "accessible": true, "elevator_nearby": "NE Corner Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "metlife-zone-b", "stadium_id": "metlife", "name": "South Concourse — Sections 200-210",
+    "capacity": 9000, "current_count": 3100, "trend_last_10min": "stable",
+    "gates": ["Gate C", "Gate D"], "accessible": true, "elevator_nearby": "SE Corner Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "metlife-zone-c", "stadium_id": "metlife", "name": "West Mezzanine — Sections 211-225",
+    "capacity": 7500, "current_count": 4800, "trend_last_10min": "rising",
+    "gates": ["Gate E"], "accessible": true, "elevator_nearby": "West Side Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "metlife-zone-d", "stadium_id": "metlife", "name": "East Club Level — Sections 226-240",
+    "capacity": 6000, "current_count": 2100, "trend_last_10min": "falling",
+    "gates": ["Gate F"], "accessible": true, "elevator_nearby": "NE Corner Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "metlife-zone-e", "stadium_id": "metlife", "name": "Upper Deck North — Sections 301-315",
+    "capacity": 11000, "current_count": 6500, "trend_last_10min": "stable",
+    "gates": ["Gate A", "Gate B"], "accessible": false, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+  {
+    "id": "metlife-zone-f", "stadium_id": "metlife", "name": "Transit Plaza — Lot G & Shuttle Drop-off",
+    "capacity": 5000, "current_count": 1800, "trend_last_10min": "rising",
+    "gates": ["Transit Gate"], "accessible": true, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+  {
+    "id": "metlife-zone-g", "stadium_id": "metlife", "name": "Main Entry Concourse — Gates A-D",
+    "capacity": 12000, "current_count": 7200, "trend_last_10min": "rising",
+    "gates": ["Gate A", "Gate B", "Gate C", "Gate D"], "accessible": true, "elevator_nearby": "NE Corner Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "metlife-zone-h", "stadium_id": "metlife", "name": "Food Court & Fan Zone — West Concourse",
+    "capacity": 4000, "current_count": 2500, "trend_last_10min": "stable",
+    "gates": ["Gate E"], "accessible": true, "elevator_nearby": "West Side Elevator",
+    "nearby_incidents": []
+  },
+
+  {
+    "id": "azteca-zone-a", "stadium_id": "azteca", "name": "Zona Norte — Secciones 101-112",
+    "capacity": 9500, "current_count": 5800, "trend_last_10min": "stable",
+    "gates": ["Puerta 1", "Puerta 2"], "accessible": true, "elevator_nearby": "Elevador Norte",
+    "nearby_incidents": []
+  },
+  {
+    "id": "azteca-zone-b", "stadium_id": "azteca", "name": "Zona Sur — Secciones 113-124",
+    "capacity": 9000, "current_count": 4200, "trend_last_10min": "rising",
+    "gates": ["Puerta 7", "Puerta 8"], "accessible": true, "elevator_nearby": "Elevador Sur",
+    "nearby_incidents": []
+  },
+  {
+    "id": "azteca-zone-c", "stadium_id": "azteca", "name": "Zona Oriente — Secciones 125-136",
+    "capacity": 8500, "current_count": 3900, "trend_last_10min": "falling",
+    "gates": ["Puerta 3", "Puerta 4"], "accessible": true, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+  {
+    "id": "azteca-zone-d", "stadium_id": "azteca", "name": "Zona Poniente — Secciones 137-148",
+    "capacity": 8000, "current_count": 5100, "trend_last_10min": "stable",
+    "gates": ["Puerta 5", "Puerta 6"], "accessible": false, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+  {
+    "id": "azteca-zone-e", "stadium_id": "azteca", "name": "Plaza de Acceso — Metro Entrance",
+    "capacity": 6000, "current_count": 2800, "trend_last_10min": "rising",
+    "gates": ["Puerta Metro"], "accessible": true, "elevator_nearby": "Elevador Metro",
+    "nearby_incidents": []
+  },
+  {
+    "id": "azteca-zone-f", "stadium_id": "azteca", "name": "Palcos VIP — Nivel Superior",
+    "capacity": 3000, "current_count": 1200, "trend_last_10min": "stable",
+    "gates": ["Puerta VIP"], "accessible": true, "elevator_nearby": "Elevador VIP",
+    "nearby_incidents": []
+  },
+  {
+    "id": "azteca-zone-g", "stadium_id": "azteca", "name": "Explanada Principal — Fan Festival",
+    "capacity": 7000, "current_count": 4100, "trend_last_10min": "stable",
+    "gates": ["Puerta 1", "Puerta 15"], "accessible": true, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+  {
+    "id": "azteca-zone-h", "stadium_id": "azteca", "name": "Zona de Comida — Nivel Cancha",
+    "capacity": 3500, "current_count": 1800, "trend_last_10min": "stable",
+    "gates": ["Puerta 3"], "accessible": true, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+
+  {
+    "id": "att-zone-a", "stadium_id": "att", "name": "Main Concourse — Gates A-B",
+    "capacity": 12000, "current_count": 7200, "trend_last_10min": "rising",
+    "gates": ["Gate A", "Gate B"], "accessible": true, "elevator_nearby": "Gate A Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "att-zone-b", "stadium_id": "att", "name": "East Concourse — Gates C-D",
+    "capacity": 11000, "current_count": 5500, "trend_last_10min": "stable",
+    "gates": ["Gate C", "Gate D"], "accessible": true, "elevator_nearby": "Gate C Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "att-zone-c", "stadium_id": "att", "name": "South End — Gates E-F",
+    "capacity": 10000, "current_count": 4800, "trend_last_10min": "falling",
+    "gates": ["Gate E", "Gate F"], "accessible": true, "elevator_nearby": "Gate E Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "att-zone-d", "stadium_id": "att", "name": "West End — Gates G-H",
+    "capacity": 10500, "current_count": 6100, "trend_last_10min": "rising",
+    "gates": ["Gate G", "Gate H"], "accessible": true, "elevator_nearby": "Gate G Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "att-zone-e", "stadium_id": "att", "name": "Upper Deck — 400 Level",
+    "capacity": 15000, "current_count": 8900, "trend_last_10min": "stable",
+    "gates": ["Gate B", "Gate F"], "accessible": false, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+  {
+    "id": "att-zone-f", "stadium_id": "att", "name": "Club Level — 200 Level",
+    "capacity": 8000, "current_count": 3200, "trend_last_10min": "stable",
+    "gates": ["Gate A", "Gate E"], "accessible": true, "elevator_nearby": "Gate A Elevator",
+    "nearby_incidents": []
+  },
+  {
+    "id": "att-zone-g", "stadium_id": "att", "name": "Shuttle Drop-off Plaza",
+    "capacity": 6000, "current_count": 2200, "trend_last_10min": "falling",
+    "gates": ["Transit Gate"], "accessible": true, "elevator_nearby": null,
+    "nearby_incidents": []
+  },
+  {
+    "id": "att-zone-h", "stadium_id": "att", "name": "Fan Experience Zone — AT&T Plaza",
+    "capacity": 5000, "current_count": 3100, "trend_last_10min": "stable",
+    "gates": ["Gate A"], "accessible": true, "elevator_nearby": null,
+    "nearby_incidents": []
+  }
+]

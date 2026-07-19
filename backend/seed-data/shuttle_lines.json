@@ -1,0 +1,50 @@
+[
+  {
+    "line_id": "metlife-shuttle-1", "stadium_id": "metlife", "name": "NJ Transit Shuttle — Secaucus Junction",
+    "capacity_pct": 45, "next_departure": "15 min", "eta_to_stadium": "25 min"
+  },
+  {
+    "line_id": "metlife-shuttle-2", "stadium_id": "metlife", "name": "Park & Ride — Lot 20 Express",
+    "capacity_pct": 72, "next_departure": "8 min", "eta_to_stadium": "12 min"
+  },
+  {
+    "line_id": "metlife-shuttle-3", "stadium_id": "metlife", "name": "Manhattan Express — Port Authority",
+    "capacity_pct": 88, "next_departure": "20 min", "eta_to_stadium": "35 min"
+  },
+  {
+    "line_id": "metlife-shuttle-4", "stadium_id": "metlife", "name": "Hoboken Ferry + Shuttle",
+    "capacity_pct": 30, "next_departure": "10 min", "eta_to_stadium": "40 min"
+  },
+  {
+    "line_id": "azteca-shuttle-1", "stadium_id": "azteca", "name": "Metro Línea 2 — Estadio Azteca",
+    "capacity_pct": 55, "next_departure": "5 min", "eta_to_stadium": "18 min"
+  },
+  {
+    "line_id": "azteca-shuttle-2", "stadium_id": "azteca", "name": "Tren Ligero Xochimilco — Estadio Azteca",
+    "capacity_pct": 40, "next_departure": "7 min", "eta_to_stadium": "15 min"
+  },
+  {
+    "line_id": "azteca-shuttle-3", "stadium_id": "azteca", "name": "Shuttle Reforma — Centro Histórico",
+    "capacity_pct": 65, "next_departure": "12 min", "eta_to_stadium": "30 min"
+  },
+  {
+    "line_id": "azteca-shuttle-4", "stadium_id": "azteca", "name": "Shuttle Santa Fe — Zona Poniente",
+    "capacity_pct": 35, "next_departure": "18 min", "eta_to_stadium": "45 min"
+  },
+  {
+    "line_id": "att-shuttle-1", "stadium_id": "att", "name": "TRE Rail + AT&T Shuttle",
+    "capacity_pct": 60, "next_departure": "22 min", "eta_to_stadium": "40 min"
+  },
+  {
+    "line_id": "att-shuttle-2", "stadium_id": "att", "name": "Globe Life Parking Shuttle — Lot A",
+    "capacity_pct": 50, "next_departure": "5 min", "eta_to_stadium": "8 min"
+  },
+  {
+    "line_id": "att-shuttle-3", "stadium_id": "att", "name": "Dallas CBD Express — Convention Center",
+    "capacity_pct": 78, "next_departure": "15 min", "eta_to_stadium": "35 min"
+  },
+  {
+    "line_id": "att-shuttle-4", "stadium_id": "att", "name": "Fort Worth Express — Sundance Square",
+    "capacity_pct": 25, "next_departure": "30 min", "eta_to_stadium": "50 min"
+  }
+]

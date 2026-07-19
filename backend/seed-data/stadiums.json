@@ -1,0 +1,55 @@
+[
+  {
+    "id": "metlife",
+    "name": "New York New Jersey Stadium (MetLife Stadium)",
+    "city": "East Rutherford, NJ",
+    "country": "USA",
+    "capacity": 82500,
+    "match_context": "FIFA World Cup 2026 Final — July 19, 2026",
+    "timezone": "America/New_York",
+    "coordinates": { "lat": 40.8128, "lng": -74.0742 },
+    "accessibility_features": [
+      "Elevators at NE and SE corners, plus west side",
+      "Wheelchair-accessible seating in all levels (100, 200, 300)",
+      "Sensory rooms available at Section 111 and Section 233",
+      "Audio descriptive commentary via FIFA ADC app",
+      "Companion restrooms on all levels",
+      "Step-free access from Lot G via Gate A ramp"
+    ]
+  },
+  {
+    "id": "azteca",
+    "name": "Mexico City Stadium (Estadio Azteca)",
+    "city": "Mexico City",
+    "country": "Mexico",
+    "capacity": 83000,
+    "match_context": "FIFA World Cup 2026 — Opening Match venue, June 11, 2026",
+    "timezone": "America/Mexico_City",
+    "coordinates": { "lat": 19.3029, "lng": -99.1505 },
+    "accessibility_features": [
+      "Accessible parking zones near Gate 1 and Gate 15",
+      "Ramp access to lower bowl from all cardinal gates",
+      "Metro Estadio Azteca station has elevator access",
+      "Wheelchair companion seating in Sections 102, 108, 114",
+      "Accessible restrooms at every concourse level"
+    ]
+  },
+  {
+    "id": "att",
+    "name": "Dallas Stadium (AT&T Stadium)",
+    "city": "Arlington, TX",
+    "country": "USA",
+    "capacity": 94000,
+    "match_context": "FIFA World Cup 2026 — Semifinal venue, July 14-15, 2026",
+    "timezone": "America/Chicago",
+    "coordinates": { "lat": 32.7473, "lng": -97.0945 },
+    "accessibility_features": [
+      "ADA-compliant entrances at all gates (A through H)",
+      "Companion restrooms on all levels",
+      "Assistive listening devices at Guest Services (Gate A, Gate E)",
+      "Wheelchair-accessible seating in all price tiers",
+      "Sensory room at Section C120",
+      "Service animal relief areas at Gate D and Gate G plazas"
+    ]
+  }
+]

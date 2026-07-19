@@ -1,0 +1,11 @@
+[
+  { "lot_id": "metlife-lot-g", "stadium_id": "metlife", "name": "Lot G — Main (No General Parking)", "occupancy_pct": 95 },
+  { "lot_id": "metlife-lot-j", "stadium_id": "metlife", "name": "Lot J — Accessible Parking", "occupancy_pct": 60 },
+  { "lot_id": "metlife-lot-k", "stadium_id": "metlife", "name": "Lot K — Overflow", "occupancy_pct": 40 },
+  { "lot_id": "azteca-lot-1", "stadium_id": "azteca", "name": "Estacionamiento Zona Norte", "occupancy_pct": 85 },
+  { "lot_id": "azteca-lot-2", "stadium_id": "azteca", "name": "Estacionamiento Puerta 15", "occupancy_pct": 70 },
+  { "lot_id": "azteca-lot-3", "stadium_id": "azteca", "name": "Estacionamiento Accesible", "occupancy_pct": 45 },
+  { "lot_id": "att-lot-a", "stadium_id": "att", "name": "AT&T Lot A — Premium", "occupancy_pct": 92 },
+  { "lot_id": "att-lot-b", "stadium_id": "att", "name": "AT&T Lot B — General", "occupancy_pct": 78 },
+  { "lot_id": "att-lot-c", "stadium_id": "att", "name": "Globe Life Overflow Lot", "occupancy_pct": 35 }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "sop-001",
+    "title": "Lost Child Protocol",
+    "category": "safety",
+    "keywords": ["lost", "child", "missing", "kid", "minor", "children", "boy", "girl"],
+    "body": "1. Immediately radio Zone Supervisor on Channel 1 with child's description (age, clothing, last known location). 2. Do NOT move the child from current location unless there is a direct safety risk. 3. Stay with the child and reassure them calmly. 4. Safeguarding Officer will be dispatched within 5 minutes. 5. Log incident in zone tablet under 'Safeguarding'. 6. Do NOT hand the child to anyone claiming to be a parent without Safeguarding Officer verification. [FICTIONAL — illustrative of how grounding works with real venue procedures]",
+    "escalation_required": true
+  },
+  {
+    "id": "sop-002",
+    "title": "Medical Emergency — First Response",
+    "category": "medical",
+    "keywords": ["medical", "injury", "hurt", "ambulance", "faint", "collapse", "heart", "breathing", "unconscious", "bleeding", "seizure"],
+    "body": "1. Call medical dispatch on Channel 3 immediately. Provide exact zone and section number. 2. Clear a 3-meter radius around the patient. 3. Do NOT administer any medication or attempt medical procedures. 4. If trained in first aid, provide basic care (recovery position, pressure on wounds) until medical team arrives. 5. Guide the medical team to the exact location when they arrive. 6. Complete an incident report form after patient handoff. [FICTIONAL — illustrative only]",
+    "escalation_required": true
+  },
+  {
+    "id": "sop-003",
+    "title": "Fire / Evacuation Priority Protocol",
+    "category": "fire",
+    "keywords": ["fire", "smoke", "evacuation", "alarm", "emergency exit", "evacuate"],
+    "body": "1. On hearing the evacuation alarm, immediately direct fans to the nearest marked emergency exit. 2. Prioritize: persons with disabilities → elderly → families with children → general fans. 3. Do NOT use elevators during fire evacuation — direct wheelchair users to designated Areas of Refuge and radio their location to Fire Command. 4. Check restrooms and concession areas for remaining fans. 5. Move to your assigned assembly point and report headcount to Zone Supervisor. [FICTIONAL — illustrative only]",
+    "escalation_required": true
+  },
+  {
+    "id": "sop-004",
+    "title": "Severe Weather — Shelter-in-Place",
+    "category": "weather",
+    "keywords": ["weather", "storm", "lightning", "rain", "thunder", "shelter", "tornado", "hurricane"],
+    "body": "1. When shelter-in-place is announced, direct fans away from open concourse areas toward covered interior sections. 2. Close outer gates and redirect foot traffic inward. 3. Reassure fans that the venue is designed for weather events and provide estimated wait time if available. 4. Do NOT allow fans to exit to parking areas during active lightning or tornado warnings. 5. Monitor Channel 1 for all-clear announcement. [FICTIONAL — illustrative only]",
+    "escalation_required": true
+  },
+  {
+    "id": "sop-005",
+    "title": "De-escalation and Conflict Protocol",
+    "category": "security",
+    "keywords": ["fight", "argument", "aggressive", "drunk", "conflict", "altercation", "disruptive", "threatening"],
+    "body": "1. Approach calmly. Keep a safe distance (arm's length). 2. Use a calm, low tone. Ask 'How can I help?' rather than giving orders. 3. Listen actively and acknowledge the person's frustration. 4. If the situation cannot be resolved verbally within 2 minutes, radio Security on Channel 2. 5. Do NOT physically restrain anyone — that is security's role. 6. Note the person's location and description for the security team. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-006",
+    "title": "Accessibility Escort Request",
+    "category": "accessibility",
+    "keywords": ["wheelchair", "disability", "accessible", "escort", "mobility", "blind", "deaf", "assistance"],
+    "body": "1. If a fan requests wheelchair assistance or an accessibility escort, radio Guest Services on Channel 4. 2. Provide the fan's current location and destination section. 3. Stay with the fan until the escort team arrives (typical response: 3-5 minutes). 4. If the fan needs to reach their seat urgently and a step-free route is available, you may walk with them — but do not push a wheelchair unless the fan explicitly requests it. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-007",
+    "title": "Gate Closure — Overcapacity Protocol",
+    "category": "crowd",
+    "keywords": ["gate", "closed", "full", "capacity", "overflow", "redirect", "queue", "crowding"],
+    "body": "1. When instructed to close your gate, place the barrier and activate the 'Gate Closed — Use Gate [X]' signage. 2. Politely redirect fans to the alternate gate specified by Control. 3. Do NOT re-open the gate on your own — only Control can authorize reopening. 4. If fans become frustrated, acknowledge the inconvenience and explain the redirect is for their safety. 5. Monitor for crowd pressure building — if density feels unsafe, radio Control immediately. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-008",
+    "title": "Banned Items — Confiscation Procedure",
+    "category": "security",
+    "keywords": ["banned", "prohibited", "item", "confiscate", "weapon", "bottle", "flag", "pole", "umbrella"],
+    "body": "1. Refer to the current banned items list posted at each gate. 2. If a fan has a banned item, explain the policy politely and offer to store the item at the gate claim area. 3. Issue a numbered claim ticket. 4. For items that may constitute a security threat (weapons, fireworks), do NOT handle the item — radio Security on Channel 2 immediately. 5. Never argue about the policy — state the rule once and offer the claim option. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-009",
+    "title": "VIP / Hospitality Routing",
+    "category": "hospitality",
+    "keywords": ["VIP", "hospitality", "suite", "premium", "lounge", "corporate", "box"],
+    "body": "1. VIP ticket holders should be directed to the nearest Hospitality entrance (marked with gold signage). 2. Verify their ticket shows a hospitality designation before directing them. 3. If unsure, radio Guest Services on Channel 4 for verification. 4. Do NOT allow general-admission fans into hospitality areas under any circumstances. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-010",
+    "title": "Suspicious Package / Unattended Bag",
+    "category": "security",
+    "keywords": ["suspicious", "package", "bag", "unattended", "bomb", "threat", "backpack"],
+    "body": "1. Do NOT touch or move the item. 2. Establish a 30-meter cordon around the item. 3. Radio Security immediately on Channel 2 with exact location. 4. Calmly move fans away from the area — use a plausible reason ('maintenance issue') to avoid panic. 5. Wait for the security sweep team. Do not speculate about the nature of the item to fans. [FICTIONAL — illustrative only]",
+    "escalation_required": true
+  },
+  {
+    "id": "sop-011",
+    "title": "Power Outage Protocol",
+    "category": "facilities",
+    "keywords": ["power", "outage", "dark", "lights", "blackout", "electricity", "generator"],
+    "body": "1. Emergency lighting will activate automatically within 10 seconds. 2. Stay at your post and reassure fans — the venue has backup generators. 3. Monitor Channel 1 for updates from Facilities. 4. If the outage persists beyond 5 minutes, begin guiding fans toward illuminated exits as a precaution. 5. Do NOT attempt to reset any electrical panels. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-012",
+    "title": "Post-Match Exit Flow Management",
+    "category": "crowd",
+    "keywords": ["exit", "leaving", "post-match", "departure", "crowd", "flow", "egress"],
+    "body": "1. At final whistle, activate 'phased exit' signage showing recommended departure zones. 2. Upper-deck fans exit first (Zones E, then D, then C). Lower-bowl fans hold for 5 minutes after upper-deck begins. 3. Direct fans to the nearest open gate — do not allow counter-flow. 4. Transit-bound fans should be directed to Shuttle Gate for the fastest route. 5. Remind fans that the concourse food court remains open for 30 minutes post-match. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-013",
+    "title": "Crowd Crush Prevention — Early Warning Signs",
+    "category": "crowd",
+    "keywords": ["crush", "crowd", "density", "pressure", "surge", "stampede", "push"],
+    "body": "1. If you observe fans being pushed, unable to move their arms, or showing signs of distress: IMMEDIATELY radio Control on Channel 1 with 'CROWD PRESSURE ALERT' and your zone. 2. Open any available exit gates in your zone to relieve pressure — this is the ONE case where you may open a gate without Control authorization. 3. Use a calm, projecting voice to direct crowd flow away from the pressure point. 4. Do NOT attempt to push back against crowd flow. 5. Prioritize getting fallen individuals up and out of the flow. [FICTIONAL — illustrative only]",
+    "escalation_required": true
+  },
+  {
+    "id": "sop-014",
+    "title": "ASL / Sign Language Interpreter Request",
+    "category": "accessibility",
+    "keywords": ["sign", "language", "ASL", "interpreter", "deaf", "hearing", "impaired"],
+    "body": "1. If a fan or staff member requests sign language interpretation, radio Guest Services on Channel 4. 2. Note the fan's location and the nature of their request. 3. An ASL interpreter can be dispatched within 10 minutes to most zones. 4. In the meantime, offer written communication — pen and paper or the venue's accessibility text chat. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  },
+  {
+    "id": "sop-015",
+    "title": "Heat / Dehydration — Fan Welfare Check",
+    "category": "medical",
+    "keywords": ["heat", "hot", "dehydration", "water", "sunstroke", "heatstroke", "dizzy", "nausea"],
+    "body": "1. If a fan appears dizzy, disoriented, or is complaining of extreme heat: guide them to the nearest shaded/air-conditioned rest area. 2. Offer free water from the nearest hydration station (locations: every gate plaza, every concourse midpoint). 3. If symptoms include vomiting, confusion, or loss of consciousness: treat as medical emergency — radio Channel 3. 4. Remind fans of free water refill stations via concourse signage. [FICTIONAL — illustrative only]",
+    "escalation_required": false
+  }
+]
