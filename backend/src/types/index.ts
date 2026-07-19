@@ -52,10 +52,11 @@ export interface Incident {
   id?: string;
   type: string;
   severity: IncidentSeverity;
-  zone_id: string;
-  description: string;
-  status: IncidentStatus;
-  timestamp: string;
+  zone_id?: string;
+  description?: string;
+  status?: IncidentStatus;
+  timestamp?: string;
+  time?: string;
 }
 
 // ── SOP Snippets ─────────────────────────────────────────

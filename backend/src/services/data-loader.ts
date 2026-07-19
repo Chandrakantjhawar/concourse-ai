@@ -44,13 +44,15 @@ export function loadAllData(): DataStore {
 
   console.log('[DataLoader] Loading seed data from', SEED_DIR);
 
-  store = {
+  const newStore: DataStore = {
     stadiums: loadJsonFile('stadiums.json', z.array(StadiumSchema)),
     zones: loadJsonFile('zones.json', z.array(ZoneSchema)),
     sopSnippets: loadJsonFile('sop_snippets.json', z.array(SOPSnippetSchema)),
     shuttleLines: loadJsonFile('shuttle_lines.json', z.array(ShuttleLineSchema)),
     parkingLots: loadJsonFile('parking_lots.json', z.array(ParkingLotSchema)),
   };
+
+  store = newStore;
 
   console.log(`[DataLoader] Loaded: ${store.stadiums.length} stadiums, ${store.zones.length} zones, ${store.sopSnippets.length} SOPs, ${store.shuttleLines.length} shuttle lines, ${store.parkingLots.length} parking lots`);
 

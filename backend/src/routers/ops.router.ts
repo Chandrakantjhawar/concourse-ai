@@ -4,7 +4,7 @@
 // ──────────────────────────────────────────────────────────
 
 import { Hono } from 'hono';
-import { OpsDigestRequestSchema, OpsAskRequestSchema, OpsResponseSchema } from '../schemas/index.js';
+import { OpsAskRequestSchema, OpsResponseSchema } from '../schemas/index.js';
 import { generateStructuredResponse } from '../services/gemini.service.js';
 import { getStadium, getZones, getSOPSnippets } from '../services/data-loader.js';
 import { buildOpsDigestPrompt, buildOpsAskPrompt } from '../prompts/ops.prompt.js';
