@@ -19,9 +19,9 @@
   --border-active: rgba(59, 130, 246, 0.4);
 
   --text-primary: #f0f4ff;
-  --text-secondary: #8b95b0;
-  --text-muted: #5a6478;
-  --text-accent: #60a5fa;
+  --text-secondary: #94a3b8;
+  --text-muted: #9ca3af;
+  --text-accent: #93c5fd;
 
   /* ── Accent Colors ────────────────────────────────── */
   --accent-blue: #3b82f6;
@@ -233,7 +233,7 @@ main {
 
 .nav-tab[aria-selected="true"],
 .nav-tab.active {
-  color: var(--accent-blue);
+  color: var(--text-accent);
   background: var(--accent-blue-glow);
   border-color: var(--border-active);
 }

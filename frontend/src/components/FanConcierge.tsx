@@ -33,6 +33,13 @@ const LANGUAGE_PRESETS = [
   { code: 'ar', flag: '🇸🇦', name: 'العربية' },
 ];
 
+/**
+ * FanConcierge Component
+ * Provides a multilingual chat interface for fans to ask venue-specific questions.
+ * Connects to the `/api/concierge/chat` endpoint to retrieve RAG-augmented answers.
+ * 
+ * @param {Props} props - The component props containing the active stadium ID.
+ */
 export function FanConcierge({ stadiumId }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -90,6 +97,7 @@ export function FanConcierge({ stadiumId }: Props) {
 
       setMessages(prev => [...prev, aiMsg]);
     } catch (err) {
+      console.error('[FanConcierge] Chat error:', err);
       setMessages(prev => [...prev, {
         id: `err-${Date.now()}`,
         role: 'ai',

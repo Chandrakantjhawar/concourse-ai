@@ -16,6 +16,11 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'transit', label: 'Transit', icon: '🚌' },
 ];
 
+/**
+ * App Component (Root)
+ * Main shell for Concourse AI - The Official Venue & Operations Management Portal for FIFA World Cup 2026.
+ * Manages global state (selected stadium, health checks) and navigation tabs.
+ */
 function App() {
   const [stadiums, setStadiums] = useState<Stadium[]>([]);
   const [selectedStadium, setSelectedStadium] = useState<string>('');
@@ -70,7 +75,7 @@ function App() {
           <div className="app-logo">
             <div>
               <div className="app-logo-text">⚽ Concourse AI</div>
-              <div className="app-logo-sub">Venue & Operations Management Challenge</div>
+              <div className="app-logo-sub">FIFA World Cup 2026™ — Venue & Operations Management Official Portal</div>
             </div>
           </div>
 
@@ -170,9 +175,9 @@ function App() {
         fontSize: 'var(--text-xs)',
         borderBlockStart: '1px solid var(--border-subtle)',
       }}>
-        <p>Concourse AI — Built for Google Prompt Wars with Gemini 2.0 Flash</p>
+        <p>Concourse AI — Official Submission for Google Prompt Wars Hackathon (Venue & Operations Management Challenge)</p>
         <p style={{ marginBlockStart: 'var(--space-xs)' }}>
-          All SOP data is fictional/illustrative. Not affiliated with FIFA.
+          All SOP data is fictional/illustrative. Not affiliated with FIFA 2026™.
         </p>
       </footer>
     </div>

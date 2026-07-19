@@ -18,6 +18,11 @@ const SPIKE_PAYLOAD = [
     nearby_incidents: [{ type: 'crowd_pressure', severity: 'critical', time: 'now' }] },
 ];
 
+/**
+ * Get CSS class based on zone status
+ * @param {string} status - The zone status (critical, watch, normal)
+ * @returns {string} CSS class name
+ */
 function getStatusClass(status: string): string {
   if (status === 'critical') return 'status-critical';
   if (status === 'watch') return 'status-watch';
@@ -26,12 +31,24 @@ function getStatusClass(status: string): string {
 
 
 
+/**
+ * Get CSS color variable based on sustainability usage status
+ * @param {string} status - Usage status
+ * @returns {string} CSS color variable string
+ */
 function getStatusColor(status: string): string {
   if (status === 'critical') return 'var(--status-critical)';
   if (status === 'elevated') return 'var(--status-watch)';
   return 'var(--status-normal)';
 }
 
+/**
+ * CrowdPulseDashboard Component
+ * Renders the operations command center for stadium staff.
+ * Allows simulating crowd telemetry spikes and generating AI-powered briefings.
+ * 
+ * @param {Props} props - The component props containing the active stadium ID.
+ */
 export function CrowdPulseDashboard({ stadiumId }: Props) {
   const [briefing, setBriefing] = useState<CrowdBriefing | null>(null);
   const [loading, setLoading] = useState(false);

@@ -4,6 +4,12 @@
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
+/**
+ * Generic fetch wrapper for API calls
+ * @param {string} path - The API endpoint path
+ * @param {RequestInit} [options] - Fetch options
+ * @returns {Promise<T>} Typed response
+ */
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
@@ -85,6 +91,10 @@ export interface HealthResponse {
 
 // ── API Functions ────────────────────────────────────────
 
+/**
+ * API Client methods
+ * Handles all communication with the Concourse AI backend
+ */
 export const api = {
   getStadiums: () => request<Stadium[]>('/stadiums'),
 

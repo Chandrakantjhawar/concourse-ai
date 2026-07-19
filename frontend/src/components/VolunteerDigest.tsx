@@ -17,6 +17,12 @@ const ROLES = [
   'Fan Experience Host',
 ];
 
+/**
+ * VolunteerDigest Component
+ * Provides operational staff with AI-generated shift digests and SOP-grounded Q&A.
+ * 
+ * @param {Props} props - The component props containing the active stadium ID.
+ */
 export function VolunteerDigest({ stadiumId }: Props) {
   const [role, setRole] = useState(ROLES[0]!);
   const [digest, setDigest] = useState<OpsResponse | null>(null);

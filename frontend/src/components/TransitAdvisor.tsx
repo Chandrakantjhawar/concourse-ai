@@ -12,6 +12,13 @@ const ORIGIN_AREAS: Record<string, string[]> = {
   att: ['Dallas CBD', 'Fort Worth', 'Irving', 'Grand Prairie', 'Frisco', 'Plano'],
 };
 
+/**
+ * TransitAdvisor Component
+ * Recommends the best transit option for fans based on their origin area.
+ * Evaluates shuttle lines, parking, and sustainability metrics.
+ * 
+ * @param {Props} props - The component props containing the active stadium ID.
+ */
 export function TransitAdvisor({ stadiumId }: Props) {
   const [originArea, setOriginArea] = useState('');
   const [recommendation, setRecommendation] = useState<TransitResponse | null>(null);
