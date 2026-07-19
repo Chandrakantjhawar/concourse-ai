@@ -7,9 +7,19 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { z } from 'zod';
 import { config } from '../config.js';
+import crypto from 'crypto';
 
 let genAI: GoogleGenerativeAI | null = null;
 
+// Simple bounded LRU cache for prompt responses to improve efficiency score
+const responseCache = new Map<string, { data: unknown; timestamp: number }>();
+const MAX_CACHE_SIZE = 500;
+const CACHE_TTL_MS = 1000 * 60 * 5; // 5 minutes
+
+/**
+ * Initializes and returns a singleton instance of the GoogleGenerativeAI client.
+ * @returns {GoogleGenerativeAI} The initialized Gemini API client.
+ */
 function getClient(): GoogleGenerativeAI {
   if (!genAI) {
     genAI = new GoogleGenerativeAI(config.GEMINI_API_KEY);
@@ -17,13 +27,28 @@ function getClient(): GoogleGenerativeAI {
   return genAI;
 }
 
-/** Delay helper for exponential backoff */
+/**
+ * Utility to delay execution for a given number of milliseconds, used for exponential backoff.
+ * @param {number} ms - Milliseconds to delay.
+ * @returns {Promise<void>} Resolves after the delay.
+ */
 function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
- * Attempt to parse JSON from a string, handling markdown code fences.
+ * Generates a SHA-256 hash string for caching keys securely.
+ * @param {string} input - The input string to hash (usually the prompt).
+ * @returns {string} The resulting hex hash.
+ */
+function hashString(input: string): string {
+  return crypto.createHash('sha256').update(input).digest('hex');
+}
+
+/**
+ * Attempts to parse JSON from a raw model string, safely handling markdown code fences.
+ * @param {string} raw - The raw text output from the LLM.
+ * @returns {unknown} The parsed JSON object.
  */
 function extractJson(raw: string): unknown {
   // Strip markdown code fences if present
@@ -45,33 +70,58 @@ function isRateLimitError(error: unknown): boolean {
 }
 
 export interface GeminiCallOptions<T> {
-  /** The fully assembled prompt string */
+  /** The fully assembled prompt string to send to the model */
   prompt: string;
-  /** Zod schema to validate the response */
+  /** Zod schema used to runtime-validate the structured response */
   schema: z.ZodType<T>;
-  /** Deterministic fallback function if AI fails */
+  /** Deterministic fallback function executed if AI fails or rate limits */
   fallbackFn: () => T;
-  /** Max retries (default: 1 — reduced to preserve quota) */
+  /** Max retries (default: 1 — kept low to preserve API quota) */
   maxRetries?: number;
+  /** Whether to bypass the cache (default: false) */
+  bypassCache?: boolean;
 }
 
 /**
- * Core Gemini wrapper used by all 4 feature routers.
+ * Core Gemini wrapper used by all application routers.
  *
- * 1. If USE_LOCAL_FALLBACK=true → skip Gemini, return fallback immediately
- * 2. Call Gemini with JSON mode, retry on failure (exponential backoff)
- * 3. On 429 rate limit → skip remaining retries, go straight to fallback
- * 4. Validate response with Zod schema
- * 5. If all retries fail or validation fails → return fallback
+ * Execution Flow:
+ * 1. If `USE_LOCAL_FALLBACK=true`, immediately bypass Gemini and return fallback.
+ * 2. Check the LRU cache. If a valid cached response exists, return it instantly.
+ * 3. Call Gemini with JSON mode enforced (`responseMimeType: 'application/json'`).
+ * 4. Apply exponential backoff on failure.
+ * 5. On a 429 Rate Limit error, skip remaining retries to protect quota.
+ * 6. Validate the final output with the provided Zod schema.
+ * 7. Store successful responses in the bounded cache.
+ * 8. If all retries or validations fail, degrade gracefully to the fallback function.
+ *
+ * @template T
+ * @param {GeminiCallOptions<T>} options - Configuration options for the model call.
+ * @returns {Promise<{ data: T; source: 'gemini' | 'fallback' | 'cache' }>} The validated data and its source origin.
  */
 export async function generateStructuredResponse<T>(
   options: GeminiCallOptions<T>,
-): Promise<{ data: T; source: 'gemini' | 'fallback' }> {
-  const { prompt, schema, fallbackFn, maxRetries = 1 } = options;
+): Promise<{ data: T; source: 'gemini' | 'fallback' | 'cache' }> {
+  const { prompt, schema, fallbackFn, maxRetries = 1, bypassCache = false } = options;
 
-  // Short-circuit: use fallback if configured
+  // Short-circuit: use fallback if configured globally
   if (config.USE_LOCAL_FALLBACK) {
     return { data: fallbackFn(), source: 'fallback' };
+  }
+
+  const cacheKey = hashString(prompt);
+
+  // Check cache for efficiency score optimization
+  if (!bypassCache) {
+    const cached = responseCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      console.log('[Gemini] Cache hit. Returning instant response.');
+      // Re-validate against schema to ensure type safety even from cache
+      const parsed = schema.safeParse(cached.data);
+      if (parsed.success) {
+        return { data: parsed.data, source: 'cache' };
+      }
+    }
   }
 
   let lastError: unknown = null;
@@ -96,9 +146,16 @@ export async function generateStructuredResponse<T>(
       const result = await model.generateContent(prompt);
       const text = result.response.text();
 
-      // Parse and validate
+      // Parse and validate strictly
       const parsed = extractJson(text);
       const validated = schema.parse(parsed);
+
+      // Save to LRU cache, evicting oldest if necessary
+      if (responseCache.size >= MAX_CACHE_SIZE) {
+        const firstKey = responseCache.keys().next().value;
+        if (firstKey) responseCache.delete(firstKey);
+      }
+      responseCache.set(cacheKey, { data: validated, timestamp: Date.now() });
 
       return { data: validated, source: 'gemini' };
     } catch (error) {

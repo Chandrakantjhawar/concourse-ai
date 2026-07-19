@@ -70,7 +70,7 @@ function App() {
           <div className="app-logo">
             <div>
               <div className="app-logo-text">⚽ Concourse AI</div>
-              <div className="app-logo-sub">FIFA World Cup 2026 Co-Pilot</div>
+              <div className="app-logo-sub">Venue & Operations Management Challenge</div>
             </div>
           </div>
 
@@ -170,7 +170,7 @@ function App() {
         fontSize: 'var(--text-xs)',
         borderBlockStart: '1px solid var(--border-subtle)',
       }}>
-        <p>Concourse AI — Built for Google PromptWars with Gemini 3.5 Flash</p>
+        <p>Concourse AI — Built for Google Prompt Wars with Gemini 2.0 Flash</p>
         <p style={{ marginBlockStart: 'var(--space-xs)' }}>
           All SOP data is fictional/illustrative. Not affiliated with FIFA.
         </p>
