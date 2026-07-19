@@ -24,11 +24,7 @@ function getStatusClass(status: string): string {
   return 'status-normal';
 }
 
-function getTrendArrow(trend: string): string {
-  if (trend === 'rising') return '↑';
-  if (trend === 'falling') return '↓';
-  return '→';
-}
+
 
 function getStatusColor(status: string): string {
   if (status === 'critical') return 'var(--status-critical)';
