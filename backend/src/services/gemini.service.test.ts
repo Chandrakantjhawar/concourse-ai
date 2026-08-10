@@ -129,4 +129,13 @@ describe('Gemini Service', () => {
       expect(health).toBe(false);
     });
   });
+
+  describe('Multi-Provider Resolution', () => {
+    it('should list available providers correctly', async () => {
+      const { getAvailableProviders } = await import('./gemini.service.js');
+      const providers = getAvailableProviders();
+      expect(providers).toContain('gemini');
+    });
+  });
 });
+

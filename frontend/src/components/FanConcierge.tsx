@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { api } from '../api/client';
-import type { ConciergeResponse } from '../api/client';
+import type { ConciergeResponse, AISource } from '../api/client';
 
 interface Props {
   stadiumId: string;
@@ -14,7 +14,7 @@ interface ChatMessage {
   direction?: 'ltr' | 'rtl';
   emergency?: boolean;
   escalation_reason?: string | null;
-  source?: 'gemini' | 'fallback';
+  source?: AISource;
 }
 
 const ACCESSIBILITY_MODES = [
@@ -197,7 +197,7 @@ export function FanConcierge({ stadiumId }: Props) {
               {msg.role === 'ai' && (
                 <div className="chat-lang-badge">
                   {msg.language && <span>🌐 {msg.language}</span>}
-                  {msg.source && <span> · {msg.source === 'gemini' ? '✨ AI' : '⚡ Fallback'}</span>}
+                  {msg.source && <span> · {msg.source !== 'fallback' ? `✨ AI (${msg.source.toUpperCase()})` : '⚡ Fallback'}</span>}
                 </div>
               )}
             </div>

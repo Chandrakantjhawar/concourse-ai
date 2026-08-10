@@ -12,7 +12,7 @@ describe('Data Loader Service', () => {
 
   it('should return a specific stadium by ID', () => {
     const stadiums = getStadiums();
-    const firstId = stadiums[0].id;
+    const firstId = stadiums[0]!.id;
     
     const stadium = getStadium(firstId);
     expect(stadium).toBeDefined();
@@ -26,7 +26,7 @@ describe('Data Loader Service', () => {
 
   it('should return zones for a valid stadium', () => {
     const stadiums = getStadiums();
-    const firstId = stadiums[0].id;
+    const firstId = stadiums[0]!.id;
     
     const zones = getZones(firstId);
     expect(Array.isArray(zones)).toBe(true);

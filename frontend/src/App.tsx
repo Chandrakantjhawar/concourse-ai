@@ -99,15 +99,19 @@ function App() {
             {/* AI Status Badge */}
             {health && (
               <div
-                className={`badge ${health.gemini_reachable ? 'badge-live' : 'badge-fallback'}`}
+                className={`badge ${health.gemini_reachable || health.ai_reachable ? 'badge-live' : 'badge-fallback'}`}
                 role="status"
                 aria-live="polite"
+                title={health.model ? `Model: ${health.model}` : undefined}
               >
                 <span style={{ fontSize: '8px' }}>●</span>
-                AI: {health.gemini_reachable ? 'Live' : 'Fallback'}
+                AI: {(health.gemini_reachable || health.ai_reachable)
+                  ? `Live (${health.active_provider ? health.active_provider.toUpperCase() : 'Gemini'})`
+                  : 'Fallback'}
               </div>
             )}
           </div>
+
 
           {/* Navigation Tabs */}
           <nav aria-label="Module navigation">

@@ -83,8 +83,8 @@ export function TransitAdvisor({ stadiumId }: Props) {
           <div className="card transit-card" style={{ marginBlockEnd: 'var(--space-md)' }}>
             <div className="card-header">
               <h3 className="card-title">Best Option</h3>
-              <span className={`badge ${recommendation._source === 'gemini' ? 'badge-live' : 'badge-fallback'}`}>
-                {recommendation._source === 'gemini' ? '✨ AI' : '⚡ Fallback'}
+              <span className={`badge ${recommendation._source !== 'fallback' ? 'badge-live' : 'badge-fallback'}`}>
+                {recommendation._source !== 'fallback' ? `✨ AI (${recommendation._source.toUpperCase()})` : '⚡ Fallback'}
               </span>
             </div>
             <p style={{

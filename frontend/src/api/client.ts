@@ -46,13 +46,15 @@ export interface Zone {
   elevator_nearby: string | null;
 }
 
+export type AISource = 'gemini' | 'groq' | 'grok' | 'openrouter' | 'openai' | 'fallback' | 'cache';
+
 export interface ConciergeResponse {
   reply_text: string;
   detected_language: string;
   emergency: boolean;
   escalation_reason: string | null;
   text_direction: 'ltr' | 'rtl';
-  _source: 'gemini' | 'fallback';
+  _source: AISource;
 }
 
 export interface CrowdBriefing {
@@ -64,14 +66,14 @@ export interface CrowdBriefing {
     energy_usage_status: string;
     water_usage_status: string;
   };
-  _source: 'gemini' | 'fallback';
+  _source: AISource;
 }
 
 export interface OpsResponse {
   answer: string;
   grounded_in_sop_ids: string[];
   escalate: boolean;
-  _source: 'gemini' | 'fallback';
+  _source: AISource;
 }
 
 export interface TransitResponse {
@@ -79,15 +81,19 @@ export interface TransitResponse {
   reason: string;
   alt_options: string[];
   sustainability_note: string;
-  _source: 'gemini' | 'fallback';
+  _source: AISource;
 }
 
 export interface HealthResponse {
   status: 'ok' | 'degraded';
   gemini_reachable: boolean;
+  ai_reachable?: boolean;
+  active_provider?: string;
+  available_providers?: string[];
   timestamp: string;
   model: string;
 }
+
 
 // ── API Functions ────────────────────────────────────────
 

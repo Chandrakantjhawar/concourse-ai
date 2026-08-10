@@ -101,8 +101,8 @@ export function VolunteerDigest({ stadiumId }: Props) {
         <article className="card" style={{ marginBlockEnd: 'var(--space-lg)' }}>
           <div className="card-header">
             <h3 className="card-title">Shift Digest for {role}</h3>
-            <span className={`badge ${digest._source === 'gemini' ? 'badge-live' : 'badge-fallback'}`}>
-              {digest._source === 'gemini' ? '✨ Gemini' : '⚡ Fallback'}
+            <span className={`badge ${digest._source !== 'fallback' ? 'badge-live' : 'badge-fallback'}`}>
+              {digest._source !== 'fallback' ? `✨ ${digest._source.toUpperCase()}` : '⚡ Fallback'}
             </span>
           </div>
 
@@ -182,8 +182,8 @@ export function VolunteerDigest({ stadiumId }: Props) {
               )}
 
               <div style={{ marginBlockStart: 'var(--space-sm)' }}>
-                <span className={`badge ${qaResponse._source === 'gemini' ? 'badge-live' : 'badge-fallback'}`}>
-                  {qaResponse._source === 'gemini' ? '✨ AI' : '⚡ Fallback'}
+                <span className={`badge ${qaResponse._source !== 'fallback' ? 'badge-live' : 'badge-fallback'}`}>
+                  {qaResponse._source !== 'fallback' ? `✨ AI (${qaResponse._source.toUpperCase()})` : '⚡ Fallback'}
                 </span>
               </div>
             </div>

@@ -1,7 +1,7 @@
 // ──────────────────────────────────────────────────────────
-// Concourse AI — Gemini Service
-// Single wrapper: retries, JSON mode, injection guard,
-// Zod validation, deterministic fallback
+// Concourse AI — Multi-Provider AI Service
+// Supports Google Gemini, Groq, xAI Grok, OpenRouter & OpenAI
+// Features: retries, JSON mode, Zod validation, auto-failover, LRU caching
 // ──────────────────────────────────────────────────────────
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -9,49 +9,31 @@ import type { z } from 'zod';
 import { config } from '../config.js';
 import crypto from 'crypto';
 
+export type AIProvider = 'gemini' | 'groq' | 'grok' | 'openrouter' | 'openai';
+
 let genAI: GoogleGenerativeAI | null = null;
 
-// Simple bounded LRU cache for prompt responses to improve efficiency score
+// Bounded LRU cache for prompt responses to improve efficiency score
 const responseCache = new Map<string, { data: unknown; timestamp: number }>();
 const MAX_CACHE_SIZE = 500;
 const CACHE_TTL_MS = 1000 * 60 * 5; // 5 minutes
 
-/**
- * Initializes and returns a singleton instance of the GoogleGenerativeAI client.
- * @returns {GoogleGenerativeAI} The initialized Gemini API client.
- */
-function getClient(): GoogleGenerativeAI {
+function getGeminiClient(): GoogleGenerativeAI {
   if (!genAI) {
     genAI = new GoogleGenerativeAI(config.GEMINI_API_KEY);
   }
   return genAI;
 }
 
-/**
- * Utility to delay execution for a given number of milliseconds, used for exponential backoff.
- * @param {number} ms - Milliseconds to delay.
- * @returns {Promise<void>} Resolves after the delay.
- */
 function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * Generates a SHA-256 hash string for caching keys securely.
- * @param {string} input - The input string to hash (usually the prompt).
- * @returns {string} The resulting hex hash.
- */
 function hashString(input: string): string {
   return crypto.createHash('sha256').update(input).digest('hex');
 }
 
-/**
- * Attempts to parse JSON from a raw model string, safely handling markdown code fences.
- * @param {string} raw - The raw text output from the LLM.
- * @returns {unknown} The parsed JSON object.
- */
 function extractJson(raw: string): unknown {
-  // Strip markdown code fences if present
   let cleaned = raw.trim();
   if (cleaned.startsWith('```')) {
     cleaned = cleaned.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '');
@@ -59,81 +41,73 @@ function extractJson(raw: string): unknown {
   return JSON.parse(cleaned);
 }
 
-/**
- * Check if an error is a rate limit (429) error.
- */
 function isRateLimitError(error: unknown): boolean {
   if (error instanceof Error) {
-    return error.message.includes('429') || error.message.includes('Too Many Requests');
+    const msg = error.message.toLowerCase();
+    return msg.includes('429') || msg.includes('too many requests') || msg.includes('quota');
   }
   return false;
 }
 
-export interface GeminiCallOptions<T> {
-  /** The fully assembled prompt string to send to the model */
+/**
+ * Executes a call to an OpenAI-compatible REST API (Groq, Grok, OpenRouter, OpenAI)
+ */
+async function callOpenAICompatible(options: {
+  endpoint: string;
+  apiKey: string;
+  model: string;
   prompt: string;
-  /** Zod schema used to runtime-validate the structured response */
-  schema: z.ZodType<T>;
-  /** Deterministic fallback function executed if AI fails or rate limits */
-  fallbackFn: () => T;
-  /** Max retries (default: 1 — kept low to preserve API quota) */
-  maxRetries?: number;
-  /** Whether to bypass the cache (default: false) */
-  bypassCache?: boolean;
+  extraHeaders?: Record<string, string>;
+}): Promise<string> {
+  const { endpoint, apiKey, model, prompt, extraHeaders = {} } = options;
+
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      ...extraHeaders,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a precise AI assistant. You must ALWAYS return valid JSON matching the requested schema. Return JSON ONLY without markdown fences.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0.3,
+      max_tokens: 4096,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => response.statusText);
+    throw new Error(`HTTP ${response.status} from ${endpoint}: ${errorText}`);
+  }
+
+  const json = (await response.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const content = json.choices?.[0]?.message?.content;
+  if (!content) {
+    throw new Error(`Empty response content from ${endpoint}`);
+  }
+
+  return content;
 }
 
 /**
- * Core Gemini wrapper used by all application routers.
- *
- * Execution Flow:
- * 1. If `USE_LOCAL_FALLBACK=true`, immediately bypass Gemini and return fallback.
- * 2. Check the LRU cache. If a valid cached response exists, return it instantly.
- * 3. Call Gemini with JSON mode enforced (`responseMimeType: 'application/json'`).
- * 4. Apply exponential backoff on failure.
- * 5. On a 429 Rate Limit error, skip remaining retries to protect quota.
- * 6. Validate the final output with the provided Zod schema.
- * 7. Store successful responses in the bounded cache.
- * 8. If all retries or validations fail, degrade gracefully to the fallback function.
- *
- * @template T
- * @param {GeminiCallOptions<T>} options - Configuration options for the model call.
- * @returns {Promise<{ data: T; source: 'gemini' | 'fallback' | 'cache' }>} The validated data and its source origin.
+ * Call specific AI provider and return raw text output
  */
-export async function generateStructuredResponse<T>(
-  options: GeminiCallOptions<T>,
-): Promise<{ data: T; source: 'gemini' | 'fallback' | 'cache' }> {
-  const { prompt, schema, fallbackFn, maxRetries = 1, bypassCache = false } = options;
-
-  // Short-circuit: use fallback if configured globally
-  if (config.USE_LOCAL_FALLBACK) {
-    return { data: fallbackFn(), source: 'fallback' };
-  }
-
-  const cacheKey = hashString(prompt);
-
-  // Check cache for efficiency score optimization
-  if (!bypassCache) {
-    const cached = responseCache.get(cacheKey);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
-      console.log('[Gemini] Cache hit. Returning instant response.');
-      // Re-validate against schema to ensure type safety even from cache
-      const parsed = schema.safeParse(cached.data);
-      if (parsed.success) {
-        return { data: parsed.data, source: 'cache' };
-      }
-    }
-  }
-
-  let lastError: unknown = null;
-
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      if (attempt > 0) {
-        // Exponential backoff: 2s, 4s
-        await delay(2000 * attempt);
-      }
-
-      const client = getClient();
+async function callProvider(provider: AIProvider, prompt: string): Promise<string> {
+  switch (provider) {
+    case 'gemini': {
+      if (!config.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY is not configured');
+      const client = getGeminiClient();
       const model = client.getGenerativeModel({
         model: config.GEMINI_MODEL,
         generationConfig: {
@@ -142,40 +116,157 @@ export async function generateStructuredResponse<T>(
           maxOutputTokens: 4096,
         },
       });
-
       const result = await model.generateContent(prompt);
-      const text = result.response.text();
+      return result.response.text();
+    }
+    case 'groq': {
+      if (!config.GROQ_API_KEY) throw new Error('GROQ_API_KEY is not configured');
+      return callOpenAICompatible({
+        endpoint: 'https://api.groq.com/openai/v1/chat/completions',
+        apiKey: config.GROQ_API_KEY,
+        model: config.GROQ_MODEL,
+        prompt,
+      });
+    }
+    case 'grok': {
+      if (!config.GROK_API_KEY) throw new Error('GROK_API_KEY is not configured');
+      return callOpenAICompatible({
+        endpoint: 'https://api.x.ai/v1/chat/completions',
+        apiKey: config.GROK_API_KEY,
+        model: config.GROK_MODEL,
+        prompt,
+      });
+    }
+    case 'openrouter': {
+      if (!config.OPENROUTER_API_KEY) throw new Error('OPENROUTER_API_KEY is not configured');
+      return callOpenAICompatible({
+        endpoint: 'https://openrouter.ai/api/v1/chat/completions',
+        apiKey: config.OPENROUTER_API_KEY,
+        model: config.OPENROUTER_MODEL,
+        prompt,
+        extraHeaders: {
+          'HTTP-Referer': 'https://concourse-ai.app',
+          'X-Title': 'Concourse AI',
+        },
+      });
+    }
+    case 'openai': {
+      if (!config.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not configured');
+      const baseUrl = config.OPENAI_BASE_URL.replace(/\/+$/, '');
+      return callOpenAICompatible({
+        endpoint: `${baseUrl}/chat/completions`,
+        apiKey: config.OPENAI_API_KEY,
+        model: config.OPENAI_MODEL,
+        prompt,
+      });
+    }
+    default:
+      throw new Error(`Unsupported AI provider: ${provider}`);
+  }
+}
 
-      // Parse and validate strictly
-      const parsed = extractJson(text);
-      const validated = schema.parse(parsed);
+/**
+ * Returns prioritized list of active/configured providers
+ */
+export function getAvailableProviders(): AIProvider[] {
+  const providerConfig = config.AI_PROVIDER || 'auto';
 
-      // Save to LRU cache, evicting oldest if necessary
-      if (responseCache.size >= MAX_CACHE_SIZE) {
-        const firstKey = responseCache.keys().next().value;
-        if (firstKey) responseCache.delete(firstKey);
-      }
-      responseCache.set(cacheKey, { data: validated, timestamp: Date.now() });
+  if (providerConfig !== 'auto' && ['gemini', 'groq', 'grok', 'openrouter', 'openai'].includes(providerConfig)) {
+    return [providerConfig as AIProvider];
+  }
 
-      return { data: validated, source: 'gemini' };
-    } catch (error) {
-      lastError = error;
-      console.error(
-        `[Gemini] Attempt ${attempt + 1}/${maxRetries + 1} failed:`,
-        error instanceof Error ? error.message : String(error),
-      );
+  const configured: AIProvider[] = [];
+  if (config.GROQ_API_KEY) configured.push('groq');
+  if (config.GROK_API_KEY) configured.push('grok');
+  if (config.OPENROUTER_API_KEY) configured.push('openrouter');
+  if (config.GEMINI_API_KEY) configured.push('gemini');
+  if (config.OPENAI_API_KEY) configured.push('openai');
 
-      // On rate limit, skip remaining retries to preserve quota
-      if (isRateLimitError(error)) {
-        console.warn('[Gemini] Rate limit hit — skipping remaining retries to preserve quota.');
-        break;
+  if (configured.length === 0 && config.GEMINI_API_KEY) {
+    configured.push('gemini');
+  }
+
+  return configured;
+}
+
+export interface GeminiCallOptions<T> {
+  prompt: string;
+  schema: z.ZodType<T>;
+  fallbackFn: () => T;
+  maxRetries?: number;
+  bypassCache?: boolean;
+}
+
+/**
+ * Core Multi-Provider Structured Response Generator
+ */
+export async function generateStructuredResponse<T>(
+  options: GeminiCallOptions<T>,
+): Promise<{ data: T; source: 'gemini' | 'groq' | 'grok' | 'openrouter' | 'openai' | 'fallback' | 'cache' }> {
+  const { prompt, schema, fallbackFn, maxRetries = 1, bypassCache = false } = options;
+
+  if (config.USE_LOCAL_FALLBACK) {
+    return { data: fallbackFn(), source: 'fallback' };
+  }
+
+  const cacheKey = hashString(prompt);
+
+  if (!bypassCache) {
+    const cached = responseCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      console.log('[AIService] Cache hit. Returning instant response.');
+      const parsed = schema.safeParse(cached.data);
+      if (parsed.success) {
+        return { data: parsed.data, source: 'cache' };
       }
     }
   }
 
-  // All retries exhausted — use fallback
+  const providers = getAvailableProviders();
+  if (providers.length === 0) {
+    console.warn('[AIService] No AI API keys configured. Using local fallback.');
+    return { data: fallbackFn(), source: 'fallback' };
+  }
+
+  let lastError: unknown = null;
+
+  for (const provider of providers) {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        if (attempt > 0) {
+          await delay(1500 * attempt);
+        }
+
+        console.log(`[AIService] Calling provider: ${provider} (attempt ${attempt + 1})`);
+        const text = await callProvider(provider, prompt);
+
+        const parsed = extractJson(text);
+        const validated = schema.parse(parsed);
+
+        if (responseCache.size >= MAX_CACHE_SIZE) {
+          const firstKey = responseCache.keys().next().value;
+          if (firstKey) responseCache.delete(firstKey);
+        }
+        responseCache.set(cacheKey, { data: validated, timestamp: Date.now() });
+
+        return { data: validated, source: provider };
+      } catch (error) {
+        lastError = error;
+        console.error(
+          `[AIService] Provider ${provider} attempt ${attempt + 1}/${maxRetries + 1} failed:`,
+          error instanceof Error ? error.message : String(error),
+        );
+
+        if (isRateLimitError(error)) {
+          console.warn(`[AIService] Provider ${provider} hit rate limit/quota — trying next provider.`);
+          break; // move to next provider immediately
+        }
+      }
+    }
+  }
+
   console.warn(
-    '[Gemini] Using fallback. Last error:',
+    '[AIService] All providers failed. Using fallback. Last error:',
     lastError instanceof Error ? lastError.message : String(lastError),
   );
 
@@ -183,27 +274,57 @@ export async function generateStructuredResponse<T>(
 }
 
 /**
- * Quick health check — can we reach Gemini?
- * Uses a minimal prompt to avoid wasting quota.
+ * Health check — returns status of current active provider
  */
 export async function checkGeminiHealth(): Promise<boolean> {
   if (config.USE_LOCAL_FALLBACK) {
     return false;
   }
 
+  const providers = getAvailableProviders();
+  if (providers.length === 0) {
+    return false;
+  }
+
+  const activeProvider = providers[0];
+  if (!activeProvider) return false;
+
   try {
-    const client = getClient();
-    const model = client.getGenerativeModel({
-      model: config.GEMINI_MODEL,
-      generationConfig: {
-        responseMimeType: 'application/json',
-        maxOutputTokens: 32,
-      },
-    });
-    const result = await model.generateContent('Reply with exactly: {"status":"ok"}');
-    const text = result.response.text();
-    return text.includes('ok');
+    const text = await callProvider(activeProvider, 'Reply with JSON: {"status":"ok"}');
+    return text.includes('ok') || text.includes('status');
   } catch {
     return false;
   }
 }
+
+/**
+ * Detailed health check with active provider metadata
+ */
+export async function getAIHealthDetails(): Promise<{
+  status: 'ok' | 'degraded';
+  ai_reachable: boolean;
+  active_provider: string;
+  active_model: string;
+  available_providers: string[];
+}> {
+  const providers = getAvailableProviders();
+  const activeProvider = providers[0] ?? 'none';
+  let activeModel = 'none';
+
+  if (activeProvider === 'gemini') activeModel = config.GEMINI_MODEL;
+  else if (activeProvider === 'groq') activeModel = config.GROQ_MODEL;
+  else if (activeProvider === 'grok') activeModel = config.GROK_MODEL;
+  else if (activeProvider === 'openrouter') activeModel = config.OPENROUTER_MODEL;
+  else if (activeProvider === 'openai') activeModel = config.OPENAI_MODEL;
+
+  const reachable = await checkGeminiHealth();
+
+  return {
+    status: reachable ? 'ok' : 'degraded',
+    ai_reachable: reachable,
+    active_provider: activeProvider,
+    active_model: activeModel,
+    available_providers: providers,
+  };
+}
+

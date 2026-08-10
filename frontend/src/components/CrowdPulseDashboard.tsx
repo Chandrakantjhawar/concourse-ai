@@ -127,8 +127,8 @@ export function CrowdPulseDashboard({ stadiumId }: Props) {
           }}>
             <div className="card-header">
               <h3 className="card-title">AI Briefing</h3>
-              <span className={`badge ${briefing._source === 'gemini' ? 'badge-live' : 'badge-fallback'}`}>
-                {briefing._source === 'gemini' ? '✨ Gemini' : '⚡ Fallback'}
+              <span className={`badge ${briefing._source !== 'fallback' ? 'badge-live' : 'badge-fallback'}`}>
+                {briefing._source !== 'fallback' ? `✨ ${briefing._source.toUpperCase()}` : '⚡ Fallback'}
               </span>
             </div>
             <p style={{
